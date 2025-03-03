@@ -1,14 +1,25 @@
-name: build-test-deploy
-on: push
-jobs: 
-  build:
+name: Run tests
+
+on:
+  pull_request:
+    branches: main
+
+  workflow_dispatch:
+
+jobs:
+  tests:
     runs-on: ubuntu-latest
-    steps: 
-      - name: checkout repo
+
+    steps:
+      - name: Checkout
         uses: actions/checkout@v3
-      - name: use node.js
+
+      - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: '18.x'
-      - run: npm install
-      - run: npm run build 
+          node-version: 16.18
+
+      - name: Install Dependencies
+        run: npm ci
+      - name: Run tests
+        run: npm test
